@@ -37,12 +37,13 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        if (getIndex(uuid) == -1) {
+        int index = getIndex(uuid);
+        if (index == -1) {
             System.out.println("Resume with uuid " + uuid + " is not exists.");
             return null;
         }
 
-        return storage[getIndex(uuid)];
+        return storage[index];
     }
 
     public void delete(String uuid) {
