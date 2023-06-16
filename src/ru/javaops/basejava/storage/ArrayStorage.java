@@ -1,5 +1,7 @@
 package ru.javaops.basejava.storage;
 
+import ru.javaops.basejava.model.Resume;
+
 /**
  * Array based storage for Resumes
  */
@@ -12,5 +14,15 @@ public class ArrayStorage extends AbstractArrayStorage {
             }
         }
         return -1;
+    }
+
+    @Override
+    protected void addElement(Resume resume) {
+        storage[size] = resume;
+    }
+
+    @Override
+    protected void deleteElement(String uuid) {
+        storage[getIndex(uuid)] = storage[size - 1];
     }
 }

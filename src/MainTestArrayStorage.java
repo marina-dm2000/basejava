@@ -1,12 +1,12 @@
 import ru.javaops.basejava.model.Resume;
-import ru.javaops.basejava.storage.ArrayStorage;
+import ru.javaops.basejava.storage.SortedArrayStorage;
 import ru.javaops.basejava.storage.Storage;
 
 /**
  * Test for your ru.javaops.basejava.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    private static final Storage ARRAY_STORAGE = new ArrayStorage();
+    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume();
@@ -28,7 +28,7 @@ public class MainTestArrayStorage {
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
 
         printAll();
-        ARRAY_STORAGE.delete(r1.getUuid());
+        ARRAY_STORAGE.delete(r2.getUuid());
         printAll();
         ARRAY_STORAGE.update(r4);
         printAll();
