@@ -1,5 +1,8 @@
 package ru.javaops.basejava.storage;
 
+import ru.javaops.basejava.exception.ExistStorageException;
+import ru.javaops.basejava.exception.NotExistStorageException;
+import ru.javaops.basejava.exception.StorageException;
 import ru.javaops.basejava.model.Resume;
 
 import java.util.Arrays;
@@ -16,9 +19,9 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public final void save(Resume resume) {
         if (getIndex(resume.getUuid()) >= 0) {
-            System.out.println("Resume with uuid " + resume.getUuid() + " already exists.");
+            throw new ExistStorageException(resume.getUuid());
         } else if (size == STORAGE_LIMIT) {
-            System.out.println("Storage is full.");
+            throw new StorageException("Storage overflow", resume.getUuid());
         } else {
             insertResume(resume);
             size++;
@@ -28,8 +31,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public final Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.println("Resume with uuid " + uuid + " is not exists.");
-            return null;
+            throw new NotExistStorageException(uuid);
         }
         return storage[index];
     }
@@ -37,8 +39,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public final void delete(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.println("Resume with uuid " + uuid + " is not exists.");
-            return;
+            throw new NotExistStorageException(uuid);
         }
         removeResume(index);
         storage[size - 1] = null;
@@ -59,8 +60,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public final void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {
-            System.out.println("Resume with uuid " + resume.getUuid() + " is not exists.");
-            return;
+            throw new NotExistStorageException(resume.getUuid());
         }
         storage[index] = resume;
     }
