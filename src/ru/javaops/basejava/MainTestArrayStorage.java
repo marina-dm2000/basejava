@@ -1,3 +1,5 @@
+package ru.javaops.basejava;
+
 import ru.javaops.basejava.model.Resume;
 import ru.javaops.basejava.storage.SortedArrayStorage;
 import ru.javaops.basejava.storage.Storage;
