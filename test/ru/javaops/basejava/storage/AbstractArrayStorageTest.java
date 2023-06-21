@@ -41,9 +41,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void saveAlreadyExist() {
-        Assertions.assertThrows(ExistStorageException.class , () -> {
-            storage.save(new Resume(UUID_1));
-        });
+        Assertions.assertThrows(ExistStorageException.class, () -> storage.save(new Resume(UUID_1)));
     }
 
     @Test
@@ -57,9 +55,7 @@ public abstract class AbstractArrayStorageTest {
         } catch (Exception e) {
             Assertions.fail("Overflow occurred ahead of time");
         }
-        Assertions.assertThrows(StorageException.class, () -> {
-            storage.save(new Resume("uuid"));
-        });
+        Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume("uuid")));
     }
 
     @Test
@@ -69,25 +65,19 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void getNotExist() {
-        Assertions.assertThrows(NotExistStorageException.class , () -> {
-            storage.get("dummy");
-        });
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.get("dummy"));
     }
 
     @Test
     public void delete() {
         storage.delete(UUID_2);
         Assertions.assertEquals(2, storage.size());
-        Assertions.assertThrows(NotExistStorageException.class , () -> {
-            storage.get(UUID_2);
-        });
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.get(UUID_2));
     }
 
     @Test
     public void deleteNotExist() {
-        Assertions.assertThrows(NotExistStorageException.class , () -> {
-            storage.delete("dummy");
-        });
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.delete("dummy"));
     }
 
     @Test
@@ -110,8 +100,6 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void updateNotExist() {
-        Assertions.assertThrows(NotExistStorageException.class , () -> {
-            storage.update(new Resume("dummy"));
-        });
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.update(new Resume("dummy")));
     }
 }
