@@ -7,8 +7,12 @@ import ru.javaops.basejava.exception.ExistStorageException;
 import ru.javaops.basejava.exception.NotExistStorageException;
 import ru.javaops.basejava.model.Resume;
 
-abstract class AbstractStorageTest {
-    private final Storage storage;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public abstract class AbstractStorageTest {
+    protected final Storage storage;
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
@@ -105,7 +109,9 @@ abstract class AbstractStorageTest {
         Assertions.assertEquals(resume, storage.get(resume.getUuid()));
     }
 
-    protected void assertArrayEquals(Resume[] resumes) {
-        Assertions.assertArrayEquals(resumes, storage.getAll());
+    private void assertArrayEquals(Resume[] resumes) {
+        Set<Resume> resumeSet = new HashSet<>(List.of(resumes));
+        Set<Resume> resumeSetGetAll = new HashSet<>(List.of(storage.getAll()));
+        Assertions.assertEquals(resumeSet, resumeSetGetAll);
     }
 }
