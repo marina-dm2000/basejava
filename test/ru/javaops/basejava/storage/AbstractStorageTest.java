@@ -105,7 +105,7 @@ abstract class AbstractStorageTest {
         Assertions.assertEquals(resume, storage.get(resume.getUuid()));
     }
 
-    private void assertArrayEquals(Resume[] resumes) {
+    protected void assertArrayEquals(Resume[] resumes) {
         Assertions.assertArrayEquals(resumes, storage.getAll());
     }
 }
