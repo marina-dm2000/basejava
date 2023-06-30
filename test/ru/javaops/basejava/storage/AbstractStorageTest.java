@@ -7,9 +7,8 @@ import ru.javaops.basejava.exception.ExistStorageException;
 import ru.javaops.basejava.exception.NotExistStorageException;
 import ru.javaops.basejava.model.Resume;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public abstract class AbstractStorageTest {
     protected final Storage storage;
@@ -110,8 +109,10 @@ public abstract class AbstractStorageTest {
     }
 
     private void assertArrayEquals(Resume[] resumes) {
-        Set<Resume> resumeSet = new HashSet<>(List.of(resumes));
-        Set<Resume> resumeSetGetAll = new HashSet<>(List.of(storage.getAll()));
-        Assertions.assertEquals(resumeSet, resumeSetGetAll);
+        Stream<Resume> resumesGetAll = Arrays.stream(storage.getAll());
+        if (storage instanceof MapStorage) {
+            resumesGetAll = Arrays.stream(storage.getAll()).sorted();
+        }
+        Assertions.assertArrayEquals(resumes, resumesGetAll.toArray());
     }
 }

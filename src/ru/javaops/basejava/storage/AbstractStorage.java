@@ -32,23 +32,13 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public final int size() {
-        return sizeResume();
+        return sizeStorage();
     }
 
     public final void update(Resume resume) {
         Object searchKey = getNotExistingSearchKey(resume.getUuid());
         updateResume(searchKey, resume);
     }
-
-    protected abstract void clearStorage();
-    protected abstract void insertResume(Resume resume, Object searchKey);
-    protected abstract Object getSearchKey(String uuid);
-    protected abstract Resume getResume(Object searchKey);
-    protected abstract void removeResume(Object searchKey);
-    protected abstract Resume[] getAllResumes();
-    protected abstract int sizeResume();
-    protected abstract void updateResume(Object searchKey, Resume resume);
-    protected abstract boolean isExist(Object searchKey);
 
     private Object getExistingSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
@@ -65,4 +55,14 @@ public abstract class AbstractStorage implements Storage {
         }
         return searchKey;
     }
+
+    protected abstract void clearStorage();
+    protected abstract void insertResume(Resume resume, Object searchKey);
+    protected abstract Object getSearchKey(String uuid);
+    protected abstract Resume getResume(Object searchKey);
+    protected abstract void removeResume(Object searchKey);
+    protected abstract Resume[] getAllResumes();
+    protected abstract int sizeStorage();
+    protected abstract void updateResume(Object searchKey, Resume resume);
+    protected abstract boolean isExist(Object searchKey);
 }

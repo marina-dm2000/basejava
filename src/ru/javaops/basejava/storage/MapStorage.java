@@ -38,7 +38,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected int sizeResume() {
+    protected int sizeStorage() {
         return map.size();
     }
 

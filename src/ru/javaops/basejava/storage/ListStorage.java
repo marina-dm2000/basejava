@@ -32,7 +32,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public int sizeResume() {
+    public int sizeStorage() {
         return list.size();
     }
 
