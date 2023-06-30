@@ -3,9 +3,11 @@ package ru.javaops.basejava;
 import ru.javaops.basejava.model.Resume;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -41,5 +43,9 @@ public class MainCollections {
         for (Map.Entry<String, Resume> entry : map.entrySet()) {
             System.out.println(entry.getValue());
         }
+
+        List<Resume> resumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
+        resumes.remove(1);
+        System.out.println(resumes);
     }
 }
