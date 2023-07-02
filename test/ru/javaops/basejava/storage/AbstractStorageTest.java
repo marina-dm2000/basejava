@@ -109,9 +109,9 @@ public abstract class AbstractStorageTest {
     }
 
     private void assertArrayEquals(Resume[] resumes) {
-        Stream<Resume> resumesGetAll = Arrays.stream(storage.getAll());
+        Stream<Resume> resumesGetAll = Arrays.stream(storage.getAllSorted());
         if (storage instanceof MapStorage) {
-            resumesGetAll = Arrays.stream(storage.getAll()).sorted();
+            resumesGetAll = Arrays.stream(storage.getAllSorted()).sorted();
         }
         Assertions.assertArrayEquals(resumes, resumesGetAll.toArray());
     }
