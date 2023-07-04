@@ -24,6 +24,10 @@ public class Resume {
         return uuid;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
     @Override
     public String toString() {
         return uuid + ": " + fullName;
