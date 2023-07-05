@@ -17,10 +17,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
     private static final String UUID_NOT_EXIST = "dummy";
-    private static final Resume RESUME_1 = new Resume(UUID_1);
-    private static final Resume RESUME_2 = new Resume(UUID_2);
-    private static final Resume RESUME_3 = new Resume(UUID_3);
-    private static final Resume RESUME_4 = new Resume(UUID_4);
+    private static final Resume RESUME_1 = new Resume(UUID_1, "name1");
+    private static final Resume RESUME_2 = new Resume(UUID_2, "name2");
+    private static final Resume RESUME_3 = new Resume(UUID_3, "name3");
+    private static final Resume RESUME_4 = new Resume(UUID_4, "name4");
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -90,7 +90,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume resume = new Resume(UUID_1);
+        Resume resume = new Resume(UUID_1, "newName");
         storage.update(resume);
         Assertions.assertSame(resume, storage.get(UUID_1));
     }
