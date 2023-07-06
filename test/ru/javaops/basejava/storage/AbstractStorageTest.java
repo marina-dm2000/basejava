@@ -1,8 +1,8 @@
 package ru.javaops.basejava.storage;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import ru.javaops.basejava.exception.ExistStorageException;
 import ru.javaops.basejava.exception.NotExistStorageException;
 import ru.javaops.basejava.model.Resume;
@@ -26,7 +26,7 @@ public abstract class AbstractStorageTest {
         this.storage = storage;
     }
 
-    @BeforeEach
+    @Before
     public void setUp() {
         storage.clear();
         storage.save(RESUME_1);
@@ -35,14 +35,14 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    void clear() {
+    public void clear() {
         storage.clear();
         assertSize(0);
         assertArrayEquals(new ArrayList<>());
     }
 
     @Test
-    void save() {
+    public void save() {
         storage.save(RESUME_4);
         assertGet(RESUME_4);
         assertSize(4);
