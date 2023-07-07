@@ -9,21 +9,28 @@ public class Resume {
 
     // Unique identifier
     private final String uuid;
+    private String fullName;
 
-    public Resume(String uuid) {
+    public Resume(String uuid, String fullName) {
         this.uuid = uuid;
+        this.fullName = fullName;
     }
 
-    public Resume() {
-        this(UUID.randomUUID().toString());
+    public Resume(String fullName) {
+        this(UUID.randomUUID().toString(), fullName);
     }
 
     public String getUuid() {
         return uuid;
     }
+
+    public String getFullName() {
+        return fullName;
+    }
+
     @Override
     public String toString() {
-        return uuid;
+        return uuid + ": " + fullName;
     }
 
     @Override
@@ -33,11 +40,13 @@ public class Resume {
 
         Resume resume = (Resume) o;
 
-        return uuid.equals(resume.uuid);
+        return fullName.equals(resume.fullName) && uuid.equals(resume.uuid);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        int result = fullName == null ? 0 : fullName.hashCode();
+        result = 31 * result + uuid.hashCode();
+        return result;
     }
 }

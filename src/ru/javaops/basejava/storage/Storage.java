@@ -2,6 +2,8 @@ package ru.javaops.basejava.storage;
 
 import ru.javaops.basejava.model.Resume;
 
+import java.util.List;
+
 /**
  * Array based storage for Resumes
  */
@@ -17,7 +19,7 @@ public interface Storage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll();
+    List<Resume> getAllSorted();
 
     int size();
 

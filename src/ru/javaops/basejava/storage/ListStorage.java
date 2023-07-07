@@ -3,6 +3,7 @@ package ru.javaops.basejava.storage;
 import ru.javaops.basejava.model.Resume;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListStorage extends AbstractStorage {
     private final ArrayList<Resume> list = new ArrayList<>();
@@ -27,8 +28,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAllResumes() {
-        return list.toArray(new Resume[0]);
+    public List<Resume> getAllResumes() {
+        return list;
     }
 
     @Override
@@ -47,7 +48,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getUuid().equals(uuid)) {
                 return i;

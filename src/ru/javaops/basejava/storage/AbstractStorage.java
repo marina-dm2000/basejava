@@ -4,7 +4,14 @@ import ru.javaops.basejava.exception.ExistStorageException;
 import ru.javaops.basejava.exception.NotExistStorageException;
 import ru.javaops.basejava.model.Resume;
 
+import java.util.Comparator;
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
+    private static final Comparator<Resume> RESUME_COMPARATOR = Comparator
+            .comparing(Resume::getFullName)
+            .thenComparing(Resume::getUuid);
+
     public final void clear() {
         clearStorage();
     }
@@ -27,8 +34,10 @@ public abstract class AbstractStorage implements Storage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    public final Resume[] getAll() {
-        return getAllResumes();
+    public final List<Resume> getAllSorted() {
+        List<Resume> list = getAllResumes();
+        list.sort(RESUME_COMPARATOR);
+        return list;
     }
 
     public final int size() {
@@ -57,12 +66,20 @@ public abstract class AbstractStorage implements Storage {
     }
 
     protected abstract void clearStorage();
+
     protected abstract void insertResume(Resume resume, Object searchKey);
+
     protected abstract Object getSearchKey(String uuid);
+
     protected abstract Resume getResume(Object searchKey);
+
     protected abstract void removeResume(Object searchKey);
-    protected abstract Resume[] getAllResumes();
+
+    protected abstract List<Resume> getAllResumes();
+
     protected abstract int sizeStorage();
+
     protected abstract void updateResume(Object searchKey, Resume resume);
+
     protected abstract boolean isExist(Object searchKey);
 }

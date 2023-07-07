@@ -2,10 +2,12 @@ package ru.javaops.basejava.storage;
 
 import ru.javaops.basejava.model.Resume;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class MapStorage extends AbstractStorage {
+public class MapUuidStorage extends AbstractStorage {
     private final Map<String, Resume> map = new HashMap<>();
     @Override
     protected void clearStorage() {
@@ -18,7 +20,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected String getSearchKey(String uuid) {
         return uuid;
     }
 
@@ -33,8 +35,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume[] getAllResumes() {
-        return map.values().toArray(new Resume[0]);
+    protected List<Resume> getAllResumes() {
+        return new ArrayList<>(map.values());
     }
 
     @Override
