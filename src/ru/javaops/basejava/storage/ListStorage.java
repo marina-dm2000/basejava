@@ -5,25 +5,26 @@ import ru.javaops.basejava.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
     private final ArrayList<Resume> list = new ArrayList<>();
+
     @Override
     public void clearStorage() {
         list.clear();
     }
 
     @Override
-    public void insertResume(Resume resume, Object searchKey) {
+    public void insertResume(Resume resume, Integer searchKey) {
         list.add(resume);
     }
 
     @Override
-    public Resume getResume(Object searchKey) {
-        return list.get((Integer) searchKey);
+    public Resume getResume(Integer searchKey) {
+        return list.get(searchKey);
     }
 
     @Override
-    public void removeResume(Object searchKey) {
+    public void removeResume(Integer searchKey) {
         list.remove((int) searchKey);
     }
 
@@ -38,13 +39,13 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void updateResume(Object searchKey, Resume resume) {
-        list.set((Integer) searchKey, resume);
+    public void updateResume(Integer searchKey, Resume resume) {
+        list.set(searchKey, resume);
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return (int) searchKey != -1;
+    protected boolean isExist(Integer searchKey) {
+        return searchKey != -1;
     }
 
     @Override

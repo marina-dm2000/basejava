@@ -9,7 +9,7 @@ public class Resume {
 
     // Unique identifier
     private final String uuid;
-    private String fullName;
+    private final String fullName;
 
     public Resume(String uuid, String fullName) {
         this.uuid = uuid;

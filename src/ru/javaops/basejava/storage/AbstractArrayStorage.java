@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size;
@@ -19,7 +19,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void insertResume(Resume resume, Object searchKey) {
+    protected void insertResume(Resume resume, Integer searchKey) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         } else {
@@ -29,13 +29,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(Object searchKey) {
-        return storage[(int) searchKey];
+    protected Resume getResume(Integer searchKey) {
+        return storage[searchKey];
     }
 
     @Override
-    protected void removeResume(Object searchKey) {
-        removeArrayResume((Integer) searchKey);
+    protected void removeResume(Integer searchKey) {
+        removeArrayResume(searchKey);
         storage[size - 1] = null;
         size--;
     }
@@ -51,15 +51,16 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateResume(Object searchKey, Resume resume) {
+    protected void updateResume(Integer searchKey, Resume resume) {
         storage[(int) searchKey] = resume;
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return (int) searchKey >= 0;
+    protected boolean isExist(Integer searchKey) {
+        return searchKey >= 0;
     }
 
     protected abstract void removeArrayResume(int index);
-    protected abstract void insertArrayResume(Resume resume, Object searchKey);
+
+    protected abstract void insertArrayResume(Resume resume, Integer searchKey);
 }
