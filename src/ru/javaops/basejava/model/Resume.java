@@ -1,5 +1,6 @@
 package ru.javaops.basejava.model;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -10,6 +11,8 @@ public class Resume {
     // Unique identifier
     private final String uuid;
     private final String fullName;
+    private Map<SectionType, Section> sections;
+    private Map<ContactType, String> contacts;
 
     public Resume(String uuid, String fullName) {
         this.uuid = uuid;
