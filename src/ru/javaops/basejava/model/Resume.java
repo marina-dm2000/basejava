@@ -11,16 +11,18 @@ public class Resume {
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private Map<SectionType, Section> sections;
     private Map<ContactType, String> contacts;
+    private Map<SectionType, Section> sections;
 
-    public Resume(String uuid, String fullName) {
+    public Resume(String uuid, String fullName, Map<ContactType, String> contacts, Map<SectionType, Section> sections) {
         this.uuid = uuid;
         this.fullName = fullName;
+        this.sections = sections;
+        this.contacts = contacts;
     }
 
-    public Resume(String fullName) {
-        this(UUID.randomUUID().toString(), fullName);
+    public Resume(String fullName, Map<ContactType, String> contacts, Map<SectionType, Section> sections) {
+        this(UUID.randomUUID().toString(), fullName, contacts, sections);
     }
 
     public String getUuid() {

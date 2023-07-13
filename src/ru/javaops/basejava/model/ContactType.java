@@ -1,11 +1,21 @@
 package ru.javaops.basejava.model;
 
 public enum ContactType {
-    PHONE,
-    SKYPE,
-    EMAIL,
-    LINKEDIN,
-    GITHUB,
-    STACKOVERFLOW,
-    HOMEPAGE
+    PHONE("Тел."),
+    SKYPE("Skype"),
+    EMAIL("Почта"),
+    LINKEDIN("Профиль LinkedIn"),
+    GITHUB("Профиль GitHub"),
+    STACKOVERFLOW("Профиль Stackoverflow"),
+    HOMEPAGE("Домашняя страница");
+
+    private final String title;
+
+    ContactType(String title) {
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 }

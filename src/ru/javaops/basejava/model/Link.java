@@ -1,6 +1,7 @@
 package ru.javaops.basejava.model;
 
 import java.net.URL;
+import java.util.Objects;
 
 public class Link {
     private String title;
@@ -25,5 +26,27 @@ public class Link {
 
     public void setUrl(URL url) {
         this.url = url;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Link link = (Link) o;
+
+        return Objects.equals(title, link.title) && Objects.equals(url, link.url);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = title != null ? title.hashCode() : 0;
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 }
