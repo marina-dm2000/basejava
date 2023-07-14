@@ -1,5 +1,6 @@
 package ru.javaops.basejava.model;
 
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -11,18 +12,16 @@ public class Resume {
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private Map<ContactType, String> contacts;
-    private Map<SectionType, Section> sections;
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
-    public Resume(String uuid, String fullName, Map<ContactType, String> contacts, Map<SectionType, Section> sections) {
+    public Resume(String uuid, String fullName) {
         this.uuid = uuid;
         this.fullName = fullName;
-        this.sections = sections;
-        this.contacts = contacts;
     }
 
-    public Resume(String fullName, Map<ContactType, String> contacts, Map<SectionType, Section> sections) {
-        this(UUID.randomUUID().toString(), fullName, contacts, sections);
+    public Resume(String fullName) {
+        this(UUID.randomUUID().toString(), fullName);
     }
 
     public String getUuid() {
@@ -33,9 +32,32 @@ public class Resume {
         return fullName;
     }
 
+    public Map<ContactType, String> getContacts() {
+        return contacts;
+    }
+
+    public Map<SectionType, Section> getSections() {
+        return sections;
+    }
+
     @Override
     public String toString() {
-        return uuid + ": " + fullName;
+        StringBuilder s = new StringBuilder(fullName + '\n');
+        s.append('\n');
+        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            s.append(entry.getKey().getTitle())
+                    .append(": ")
+                    .append(entry.getValue())
+                    .append('\n');
+        }
+        s.append('\n');
+        for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
+            s.append(entry.getKey().getTitle())
+                    .append('\n')
+                    .append(entry.getValue().toString());
+        }
+
+        return s.toString();
     }
 
     @Override

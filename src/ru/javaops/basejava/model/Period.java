@@ -74,6 +74,6 @@ public class Period {
     public String toString() {
         return startPeriod + " - " + endPeriod +
                 "\n" + title +
-                '\n' + description;
+                '\n' + description + '\n';
     }
 }
