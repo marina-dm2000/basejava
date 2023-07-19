@@ -26,5 +26,17 @@ public class MainFile {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        allFiles(new File("C:\\Users\\ПГУПС\\IdeaProjects\\basejava"));
+    }
+
+    public static void allFiles(File directory) {
+        for (File name : Objects.requireNonNull(directory.listFiles())) {
+            if (name.isDirectory()) {
+                allFiles(name);
+            } else {
+                System.out.println(name.getName());
+            }
+        }
     }
 }

@@ -10,23 +10,25 @@ import java.util.Objects;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private final File directory;
-    
+
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
-            throw  new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
+            throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
-        
+
         if (!directory.canRead() || !directory.canWrite()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
-        
+
         this.directory = directory;
     }
-    
+
     @Override
     protected void clearStorage() {
-        
+        for (File file : Objects.requireNonNull(directory.listFiles())) {
+            file.delete();
+        }
     }
 
     @Override
@@ -51,7 +53,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void removeResume(File file) {
-
+        file.delete();
     }
 
     @Override
@@ -66,7 +68,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void updateResume(File file, Resume resume) {
-
+        try {
+            doWrite(resume, file);
+        } catch (IOException e) {
+            throw new StorageException("IO error", file.getName(), e);
+        }
     }
 
     @Override
