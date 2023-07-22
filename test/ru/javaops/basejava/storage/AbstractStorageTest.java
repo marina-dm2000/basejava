@@ -3,10 +3,12 @@ package ru.javaops.basejava.storage;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import ru.javaops.basejava.ResumeTestData;
 import ru.javaops.basejava.exception.ExistStorageException;
 import ru.javaops.basejava.exception.NotExistStorageException;
 import ru.javaops.basejava.model.Resume;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +19,21 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
     private static final String UUID_NOT_EXIST = "dummy";
-    private static final Resume RESUME_1 = new Resume(UUID_1, "name1");
-    private static final Resume RESUME_2 = new Resume(UUID_2, "name2");
-    private static final Resume RESUME_3 = new Resume(UUID_3, "name3");
-    private static final Resume RESUME_4 = new Resume(UUID_4, "name4");
+    private static final Resume RESUME_1;
+    private static final Resume RESUME_2;
+    private static final Resume RESUME_3;
+    private static final Resume RESUME_4;
+
+    static {
+        try {
+            RESUME_1 = ResumeTestData.createResume(UUID_1, "name1");
+            RESUME_2 = ResumeTestData.createResume(UUID_2, "name2");
+            RESUME_3 = ResumeTestData.createResume(UUID_3, "name3");
+            RESUME_4 = ResumeTestData.createResume(UUID_4, "name4");
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;

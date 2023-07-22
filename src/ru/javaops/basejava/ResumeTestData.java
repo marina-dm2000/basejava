@@ -20,7 +20,11 @@ import java.util.List;
 
 public class ResumeTestData {
     public static void main(String[] args) throws MalformedURLException {
-        Resume resume = new Resume("Григорий Кислин");
+        System.out.println(createResume("uuid1", "Григорий Кислин"));
+    }
+
+    public static Resume createResume(String uuid, String fullName) throws MalformedURLException {
+        Resume resume = new Resume(uuid, fullName);
         resume.getContacts().put(ContactType.PHONE, "+7(921) 855-0482");
         resume.getContacts().put(ContactType.SKYPE, "grigory.kislin");
         resume.getContacts().put(ContactType.EMAIL, "gkislin@yandex.ru");
@@ -273,6 +277,6 @@ public class ResumeTestData {
                         ))
         )));
 
-        System.out.println(resume);
+        return resume;
     }
 }
