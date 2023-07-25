@@ -11,12 +11,12 @@ public class MapUuidStorage extends AbstractStorage<String> {
     private final Map<String, Resume> map = new HashMap<>();
 
     @Override
-    protected void clearStorage() {
+    protected void doClear() {
         map.clear();
     }
 
     @Override
-    protected void insertResume(Resume resume, String searchKey) {
+    protected void doSave(Resume resume, String searchKey) {
         map.put(searchKey, resume);
     }
 
@@ -26,17 +26,17 @@ public class MapUuidStorage extends AbstractStorage<String> {
     }
 
     @Override
-    protected Resume getResume(String searchKey) {
+    protected Resume doGet(String searchKey) {
         return map.get(searchKey);
     }
 
     @Override
-    protected void removeResume(String searchKey) {
+    protected void doDelete(String searchKey) {
         map.remove(searchKey);
     }
 
     @Override
-    protected List<Resume> getAllResumes() {
+    protected List<Resume> doGetAll() {
         return new ArrayList<>(map.values());
     }
 
@@ -46,7 +46,7 @@ public class MapUuidStorage extends AbstractStorage<String> {
     }
 
     @Override
-    protected void updateResume(String searchKey, Resume resume) {
+    protected void doUpdate(String searchKey, Resume resume) {
         map.put(searchKey, resume);
     }
 
