@@ -9,27 +9,27 @@ public class ListStorage extends AbstractStorage<Integer> {
     private final ArrayList<Resume> list = new ArrayList<>();
 
     @Override
-    public void clearStorage() {
+    public void doClear() {
         list.clear();
     }
 
     @Override
-    public void insertResume(Resume resume, Integer searchKey) {
+    public void doSave(Resume resume, Integer searchKey) {
         list.add(resume);
     }
 
     @Override
-    public Resume getResume(Integer searchKey) {
+    public Resume doGet(Integer searchKey) {
         return list.get(searchKey);
     }
 
     @Override
-    public void removeResume(Integer searchKey) {
+    public void doDelete(Integer searchKey) {
         list.remove((int) searchKey);
     }
 
     @Override
-    public List<Resume> getAllResumes() {
+    public List<Resume> doGetAll() {
         return list;
     }
 
@@ -39,7 +39,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    public void updateResume(Integer searchKey, Resume resume) {
+    public void doUpdate(Integer searchKey, Resume resume) {
         list.set(searchKey, resume);
     }
 

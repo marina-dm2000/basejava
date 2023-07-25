@@ -9,16 +9,22 @@ import ru.javaops.basejava.model.Period;
 import ru.javaops.basejava.model.Resume;
 import ru.javaops.basejava.model.SectionType;
 import ru.javaops.basejava.model.TextSection;
+import ru.javaops.basejava.util.DateUtil;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
 public class ResumeTestData {
     public static void main(String[] args) throws MalformedURLException {
-        Resume resume = new Resume("Григорий Кислин");
+        System.out.println(createResume("uuid1", "Григорий Кислин"));
+    }
+
+    public static Resume createResume(String uuid, String fullName) throws MalformedURLException {
+        Resume resume = new Resume(uuid, fullName);
         resume.getContacts().put(ContactType.PHONE, "+7(921) 855-0482");
         resume.getContacts().put(ContactType.SKYPE, "grigory.kislin");
         resume.getContacts().put(ContactType.EMAIL, "gkislin@yandex.ru");
@@ -112,8 +118,8 @@ public class ResumeTestData {
                 new Organization(
                         new Link("Java Online Projects", new URL("https://javaops.ru/")),
                         List.of(
-                                new Period(LocalDate.of(2013, 10, 1),
-                                        LocalDate.now(),
+                                new Period(DateUtil.of(2013, Month.OCTOBER),
+                                        DateUtil.of(LocalDate.now().getYear(), LocalDate.now().getMonth()),
                                         "Автор проекта.",
                                         "Создание, организация и проведение Java онлайн " +
                                                 "проектов и стажировок.")
@@ -121,8 +127,8 @@ public class ResumeTestData {
                 new Organization(
                         new Link("Wrike", new URL("https://www.wrike.com/")),
                         List.of(
-                                new Period(LocalDate.of(2014, 10, 1),
-                                        LocalDate.of(2016, 1, 1),
+                                new Period(DateUtil.of(2014, Month.OCTOBER),
+                                        DateUtil.of(2016, Month.JANUARY),
                                         "Старший разработчик (backend)",
                                         "Проектирование и разработка онлайн платформы " +
                                                 "управления проектами Wrike (Java 8 API, Maven, " +
@@ -133,8 +139,8 @@ public class ResumeTestData {
                 new Organization(
                         new Link("RIT Center", new URL("http://ritcenter.ru/")),
                         List.of(
-                                new Period(LocalDate.of(2012, 4, 1),
-                                        LocalDate.of(2014, 10, 1),
+                                new Period(DateUtil.of(2012, Month.APRIL),
+                                        DateUtil.of(2014, Month.OCTOBER),
                                         "Java архитектор",
                                         "Организация процесса разработки системы ERP для " +
                                                 "разных окружений: релизная политика, " +
@@ -155,8 +161,8 @@ public class ResumeTestData {
                 new Organization(
                         new Link("Luxoft (Deutsche Bank)", new URL("http://www.luxoft.ru/")),
                         List.of(
-                                new Period(LocalDate.of(2010, 12, 1),
-                                        LocalDate.of(2012, 4, 1),
+                                new Period(DateUtil.of(2010, Month.DECEMBER),
+                                        DateUtil.of(2012, Month.APRIL),
                                         "Ведущий программист",
                                         "Участие в проекте Deutsche Bank CRM (WebLogic, " +
                                                 "Hibernate, Spring, Spring MVC, SmartGWT, GWT, " +
@@ -170,8 +176,8 @@ public class ResumeTestData {
                 new Organization(
                         new Link("Yota", new URL("https://www.yota.ru/")),
                         List.of(
-                                new Period(LocalDate.of(2008, 6, 1),
-                                        LocalDate.of(2010, 12, 1),
+                                new Period(DateUtil.of(2008, Month.JUNE),
+                                        DateUtil.of(2010, Month.DECEMBER),
                                         "Ведущий специалист",
                                         "Дизайн и имплементация Java EE фреймворка для " +
                                                 "отдела \"Платежные Системы\" (GlassFish v2.1, v3, " +
@@ -183,8 +189,8 @@ public class ResumeTestData {
                 new Organization(
                         new Link("Enkata", new URL("http://enkata.com/")),
                         List.of(
-                                new Period(LocalDate.of(2007, 3, 1),
-                                        LocalDate.of(2008, 6, 1),
+                                new Period(DateUtil.of(2007, Month.MARCH),
+                                        DateUtil.of(2008, Month.JUNE),
                                         "Разработчик ПО",
                                         "Реализация клиентской (Eclipse RCP) и серверной " +
                                                 "(JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей " +
@@ -193,8 +199,8 @@ public class ResumeTestData {
                 new Organization(
                         new Link("Siemens AG", new URL("https://www.siemens.com/global/en.html")),
                         List.of(
-                                new Period(LocalDate.of(2005, 1, 1),
-                                        LocalDate.of(2007, 2, 1),
+                                new Period(DateUtil.of(2005, Month.JANUARY),
+                                        DateUtil.of(2007, Month.FEBRUARY),
                                         "Разработчик ПО",
                                         "Разработка информационной модели, " +
                                                 "проектирование интерфейсов, реализация и отладка " +
@@ -204,8 +210,8 @@ public class ResumeTestData {
                 new Organization(
                         new Link("Alcatel", new URL("http://www.alcatel.ru/")),
                         List.of(
-                                new Period(LocalDate.of(1997, 9, 1),
-                                        LocalDate.of(2005, 1, 1),
+                                new Period(DateUtil.of(1997, Month.SEPTEMBER),
+                                        DateUtil.of(2005, Month.JANUARY),
                                         "Инженер по аппаратному и программному тестированию",
                                         "Тестирование, отладка, внедрение ПО цифровой " +
                                                 "телефонной станции Alcatel 1000 S12 (CHILL, " +
@@ -216,32 +222,32 @@ public class ResumeTestData {
                 new Organization(
                         new Link("Coursera", new URL("https://www.coursera.org/course/progfun")),
                         List.of(
-                                new Period(LocalDate.of(2013, 3, 1),
-                                        LocalDate.of(2013, 5, 1),
+                                new Period(DateUtil.of(2013, Month.MARCH),
+                                        DateUtil.of(2013, Month.MAY),
                                         "'Functional Programming Principles in Scala' by Martin Odersky",
                                         null)
                         )),
                 new Organization(
                         new Link("Luxoft", new URL("https://prmotion.me/?ID=22366")),
                         List.of(
-                                new Period(LocalDate.of(2011, 3, 1),
-                                        LocalDate.of(2011, 4, 1),
+                                new Period(DateUtil.of(2011, Month.MARCH),
+                                        DateUtil.of(2011, Month.APRIL),
                                         "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'",
                                         null)
                         )),
                 new Organization(
                         new Link("Siemens AG", new URL("https://www.siemens.com/global/en.html")),
                         List.of(
-                                new Period(LocalDate.of(2005, 1, 1),
-                                        LocalDate.of(2005, 4, 1),
+                                new Period(DateUtil.of(2005, Month.JANUARY),
+                                        DateUtil.of(2005, Month.APRIL),
                                         "3 месяца обучения мобильным IN сетям (Берлин)",
                                         null)
                         )),
                 new Organization(
                         new Link("Alcatel", new URL("http://www.alcatel.ru/")),
                         List.of(
-                                new Period(LocalDate.of(1997, 9, 1),
-                                        LocalDate.of(1998, 3, 1),
+                                new Period(DateUtil.of(1997, Month.SEPTEMBER),
+                                        DateUtil.of(1998, Month.MARCH),
                                         "6 месяцев обучения цифровым телефонным сетям (Москва)",
                                         null)
                         )),
@@ -252,25 +258,25 @@ public class ResumeTestData {
                                 "механики и оптики",
                                 new URL("https://itmo.ru/")),
                         List.of(
-                                new Period(LocalDate.of(1993, 9, 1),
-                                        LocalDate.of(1996, 7, 1),
+                                new Period(DateUtil.of(1993, Month.SEPTEMBER),
+                                        DateUtil.of(1996, Month.JULY),
                                         "Аспирантура (программист С, С++)",
                                         null),
-                                new Period(LocalDate.of(1987, 9, 1),
-                                        LocalDate.of(1993, 7, 1),
+                                new Period(DateUtil.of(1987, Month.SEPTEMBER),
+                                        DateUtil.of(1993, Month.JULY),
                                         "Инженер (программист Fortran, C)",
                                         null)
                         )),
                 new Organization(
                         new Link("Заочная физико-техническая школа при МФТИ", new URL("https://mipt.ru/")),
                         List.of(
-                                new Period(LocalDate.of(1984, 9, 1),
-                                        LocalDate.of(1987, 6, 1),
+                                new Period(DateUtil.of(1984, Month.SEPTEMBER),
+                                        DateUtil.of(1987, Month.JUNE),
                                         "Закончил с отличием",
                                         null)
                         ))
         )));
 
-        System.out.println(resume);
+        return resume;
     }
 }
