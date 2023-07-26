@@ -52,7 +52,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     @Override
     protected void doUpdate(Integer searchKey, Resume resume) {
-        storage[(int) searchKey] = resume;
+        storage[searchKey] = resume;
     }
 
     @Override

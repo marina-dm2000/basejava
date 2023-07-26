@@ -8,11 +8,13 @@ import ru.javaops.basejava.exception.ExistStorageException;
 import ru.javaops.basejava.exception.NotExistStorageException;
 import ru.javaops.basejava.model.Resume;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
+    protected static final File STORAGE_DIR = new File("C:\\Users\\Марина\\IdeaProjects\\basejava\\storage");
     protected final Storage storage;
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
@@ -105,7 +107,7 @@ public abstract class AbstractStorageTest {
     public void update() {
         Resume resume = new Resume(UUID_1, "newName");
         storage.update(resume);
-        Assertions.assertSame(resume, storage.get(UUID_1));
+        Assertions.assertEquals(resume, storage.get(UUID_1));
     }
 
     @Test

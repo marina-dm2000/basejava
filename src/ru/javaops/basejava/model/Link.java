@@ -1,9 +1,10 @@
 package ru.javaops.basejava.model;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.Objects;
 
-public class Link {
+public class Link implements Serializable {
     private String title;
     private URL url;
 
