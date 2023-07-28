@@ -27,15 +27,22 @@ public class MainFile {
             throw new RuntimeException(e);
         }
 
-        allFiles(new File("C:\\Users\\ПГУПС\\IdeaProjects\\basejava"));
+        allFiles(new File("C:\\Users\\Марина\\IdeaProjects\\basejava"), "");
     }
 
-    public static void allFiles(File directory) {
-        for (File name : Objects.requireNonNull(directory.listFiles())) {
-            if (name.isDirectory()) {
-                allFiles(name);
+    public static void allFiles(File directory, String indent) {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            System.out.println("directory is empty");
+            return;
+        }
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                System.out.println(indent + "D: " + file.getName());
+                allFiles(file, indent + "\t");
             } else {
-                System.out.println(name.getName());
+                System.out.println(indent + "F: " + file.getName());
             }
         }
     }
