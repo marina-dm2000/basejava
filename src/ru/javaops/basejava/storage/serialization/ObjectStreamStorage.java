@@ -1,4 +1,4 @@
-package ru.javaops.basejava.storage;
+package ru.javaops.basejava.storage.serialization;
 
 import ru.javaops.basejava.exception.StorageException;
 import ru.javaops.basejava.model.Resume;

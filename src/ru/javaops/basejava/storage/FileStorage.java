@@ -2,6 +2,7 @@ package ru.javaops.basejava.storage;
 
 import ru.javaops.basejava.exception.StorageException;
 import ru.javaops.basejava.model.Resume;
+import ru.javaops.basejava.storage.serialization.SerializationStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -37,10 +38,10 @@ public class FileStorage extends AbstractStorage<File> {
     protected void doSave(Resume resume, File file) {
         try {
             file.createNewFile();
-            serializationStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
+        doUpdate(file, resume);
     }
 
     @Override
@@ -68,13 +69,8 @@ public class FileStorage extends AbstractStorage<File> {
     protected List<Resume> doGetAll() {
         List<Resume> resumes = new ArrayList<>();
         for (File file : getFileList()) {
-            try {
-                resumes.add(serializationStrategy.doRead(new BufferedInputStream(new FileInputStream(file))));
-            } catch (IOException e) {
-                throw new StorageException("IO error", file.getName(), e);
-            }
+            resumes.add(doGet(file));
         }
-
         return resumes;
     }
 

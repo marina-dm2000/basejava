@@ -2,6 +2,7 @@ package ru.javaops.basejava.storage;
 
 import ru.javaops.basejava.exception.StorageException;
 import ru.javaops.basejava.model.Resume;
+import ru.javaops.basejava.storage.serialization.SerializationStrategy;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -36,10 +37,10 @@ public class PathStorage extends AbstractStorage<Path> {
     protected void doSave(Resume resume, Path path) {
         try {
             Files.createFile(path);
-            doUpdate(path, resume);
         } catch (IOException e) {
             throw new StorageException("Resume not created", resume.getUuid(), e);
         }
+        doUpdate(path, resume);
     }
 
     @Override
