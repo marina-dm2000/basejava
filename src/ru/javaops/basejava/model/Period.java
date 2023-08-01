@@ -1,14 +1,29 @@
 package ru.javaops.basejava.model;
 
+import com.google.gson.annotations.JsonAdapter;
+import ru.javaops.basejava.util.JsonLocalDateAdapter;
+import ru.javaops.basejava.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Period implements Serializable {
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    @JsonAdapter(JsonLocalDateAdapter.class)
     private LocalDate startPeriod;
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    @JsonAdapter(JsonLocalDateAdapter.class)
     private LocalDate endPeriod;
     private String title;
     private String description;
+
+    public Period() {
+    }
 
     public Period(LocalDate startPeriod, LocalDate endPeriod, String title, String description) {
         this.startPeriod = startPeriod;

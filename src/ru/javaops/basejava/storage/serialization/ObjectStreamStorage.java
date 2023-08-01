@@ -3,7 +3,11 @@ package ru.javaops.basejava.storage.serialization;
 import ru.javaops.basejava.exception.StorageException;
 import ru.javaops.basejava.model.Resume;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 
 public class ObjectStreamStorage implements SerializationStrategy {
     @Override

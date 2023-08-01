@@ -1,12 +1,18 @@
 package ru.javaops.basejava.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private Link website;
     private List<Period> periods;
+
+    public Organization() {
+    }
 
     public Organization(Link website, List<Period> periods) {
         this.website = website;
