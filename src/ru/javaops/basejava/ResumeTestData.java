@@ -25,19 +25,19 @@ public class ResumeTestData {
 
     public static Resume createResume(String uuid, String fullName) throws MalformedURLException {
         Resume resume = new Resume(uuid, fullName);
-        resume.getContacts().put(ContactType.PHONE, "+7(921) 855-0482");
-        resume.getContacts().put(ContactType.SKYPE, "grigory.kislin");
-        resume.getContacts().put(ContactType.EMAIL, "gkislin@yandex.ru");
-        resume.getContacts().put(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
-        resume.getContacts().put(ContactType.GITHUB, "https://github.com/gkislin");
-        resume.getContacts().put(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473/grigory-kislin");
-        resume.getContacts().put(ContactType.HOMEPAGE, "http://gkislin.ru/");
+        resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
+        resume.addContact(ContactType.SKYPE, "grigory.kislin");
+        resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
+        resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
+        resume.addContact(ContactType.GITHUB, "https://github.com/gkislin");
+        resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473/grigory-kislin");
+        resume.addContact(ContactType.HOMEPAGE, "http://gkislin.ru/");
 
-        resume.getSections().put(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения " +
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения " +
                 "по Java Web и Enterprise технологиям"));
-        resume.getSections().put(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, " +
+        resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, " +
                 "креативность, инициативность. Пурист кода и архитектуры."));
-        resume.getSections().put(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList(
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList(
                 "Организация команды и успешная реализация Java проектов для " +
                         "сторонних заказчиков: приложения автопарк на стеке Spring Cloud/" +
                         "микросервисы, система мониторинга показателей спортсменов на Spring " +
@@ -74,7 +74,7 @@ public class ResumeTestData {
                         "системы России (Cyberplat, Eport, Chronopay, Сбербанк), " +
                         "Белоруcсии(Erip, Osmp) и Никарагуа."
         )));
-        resume.getSections().put(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList(
+        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList(
                 "JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2",
 
                 "Version control: Subversion, Git, Mercury, ClearCase, Perforce",
@@ -114,7 +114,7 @@ public class ResumeTestData {
 
                 "Родной русский, английский \"upper intermediate\""
         )));
-        resume.getSections().put(SectionType.EXPERIENCE, new OrganizationSection(Arrays.asList(
+        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(Arrays.asList(
                 new Organization(
                         new Link("Java Online Projects", new URL("https://javaops.ru/")),
                         List.of(
@@ -218,7 +218,7 @@ public class ResumeTestData {
                                                 "ASM).")
                         ))
         )));
-        resume.getSections().put(SectionType.EDUCATION, new OrganizationSection(Arrays.asList(
+        resume.addSection(SectionType.EDUCATION, new OrganizationSection(Arrays.asList(
                 new Organization(
                         new Link("Coursera", new URL("https://www.coursera.org/course/progfun")),
                         List.of(
