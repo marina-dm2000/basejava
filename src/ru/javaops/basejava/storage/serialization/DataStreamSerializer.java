@@ -112,14 +112,15 @@ public class DataStreamSerializer implements SerializationStrategy {
     }
 
     @FunctionalInterface
-    public interface ListFiller<T> {
+    public interface CollectionFiller<T> {
         void accept(T t) throws IOException;
     }
 
-    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, ListFiller<? super T> listFiller) throws IOException {
+    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos,
+                                        CollectionFiller<? super T> collectionFillerFiller) throws IOException {
         dos.writeInt(collection.size());
         for (T collect : collection) {
-            listFiller.accept(collect);
+            collectionFillerFiller.accept(collect);
         }
     }
 
