@@ -21,8 +21,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class DataStreamSerializer implements SerializationStrategy {
     @Override
@@ -30,54 +30,39 @@ public class DataStreamSerializer implements SerializationStrategy {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
-            Map<ContactType, String> contacts = resume.getContacts();
-            Map<SectionType, Section> sections = resume.getSections();
 
-
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            writeWithException(resume.getContacts().entrySet(), dos, (entry) -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
+            });
 
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
+            writeWithException(resume.getSections().entrySet(), dos, (entry) -> {
                 dos.writeUTF(entry.getKey().name());
                 Section section = entry.getValue();
 
                 switch (section) {
                     case TextSection textSection -> dos.writeUTF(textSection.getText());
-                    case ListSection listSection -> {
-                        List<String> list = listSection.getList();
-                        dos.writeInt(list.size());
-                        for (String elem : list) {
-                            dos.writeUTF(elem);
-                        }
-                    }
-                    case OrganizationSection organizationSection -> {
-                        List<Organization> organizations = organizationSection.getOrganizations();
-                        dos.writeInt(organizations.size());
-                        for (Organization organization : organizations) {
-                            dos.writeUTF(organization.getWebsite().getTitle());
-                            dos.writeUTF(organization.getWebsite().getUrl().toString());
-                            List<Period> periods = organization.getPeriods();
-                            dos.writeInt(periods.size());
-                            for (Period period : periods) {
-                                writeDate(dos, period.getStartPeriod());
-                                writeDate(dos, period.getEndPeriod());
-                                dos.writeUTF(period.getTitle());
-                                if (period.getDescription() != null) {
-                                    dos.writeInt(1);
-                                    dos.writeUTF(period.getDescription());
-                                } else {
-                                    dos.writeInt(0);
-                                }
-                            }
-                        }
-                    }
+                    case ListSection listSection -> writeWithException(listSection.getList(), dos, dos::writeUTF);
+                    case OrganizationSection organizationSection ->
+                            writeWithException(organizationSection.getOrganizations(), dos, organization -> {
+                                dos.writeUTF(organization.getWebsite().getTitle());
+                                dos.writeUTF(organization.getWebsite().getUrl().toString());
+
+                                writeWithException(organization.getPeriods(), dos, period -> {
+                                    writeDate(dos, period.getStartPeriod());
+                                    writeDate(dos, period.getEndPeriod());
+                                    dos.writeUTF(period.getTitle());
+                                    if (period.getDescription() != null) {
+                                        dos.writeInt(1);
+                                        dos.writeUTF(period.getDescription());
+                                    } else {
+                                        dos.writeInt(0);
+                                    }
+                                });
+                            });
                     default -> throw new IllegalStateException("Unexpected value: " + section);
                 }
-            }
+            });
         }
     }
 
@@ -122,8 +107,19 @@ public class DataStreamSerializer implements SerializationStrategy {
                     default -> throw new IllegalStateException("Unexpected value: " + sectionType);
                 }
             }
-
             return resume;
+        }
+    }
+
+    @FunctionalInterface
+    public interface ListFiller<T> {
+        void accept(T t) throws IOException;
+    }
+
+    private <T> void writeWithException(Collection<T> collection, DataOutputStream dos, ListFiller<? super T> listFiller) throws IOException {
+        dos.writeInt(collection.size());
+        for (T collect : collection) {
+            listFiller.accept(collect);
         }
     }
 
