@@ -57,9 +57,41 @@ public class MainConcurrency {
         });
 
         System.out.println(counter);
+
+        createDeadlock();
     }
 
     private synchronized void inc() {
         counter++;
+    }
+
+    private static void createDeadlock() {
+        MainConcurrency concurrency1 = new MainConcurrency();
+        MainConcurrency concurrency2 = new MainConcurrency();
+
+        Thread thread0 = new Thread(() -> {
+            synchronized (concurrency1) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                synchronized (concurrency2) {
+                    System.out.println("Block in thread-0");
+                }
+            }
+        });
+
+        Thread thread1 = new Thread(() -> {
+            synchronized (concurrency2) {
+                synchronized (concurrency1) {
+                    System.out.println("Block in thread-1");
+                }
+            }
+        });
+
+        thread0.start();
+        thread1.start();
     }
 }
