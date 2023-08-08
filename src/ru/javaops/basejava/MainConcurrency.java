@@ -1,5 +1,7 @@
 package ru.javaops.basejava;
 
+import ru.javaops.basejava.util.DeadLock;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,40 +60,15 @@ public class MainConcurrency {
 
         System.out.println(counter);
 
-        createDeadlock();
+        String obj1 = "object1";
+        String obj2 = "object2";
+        DeadLock deadLock1 = new DeadLock(obj1, obj2);
+        DeadLock deadLock2 = new DeadLock(obj2, obj1);
+        deadLock1.threadStart();
+        deadLock2.threadStart();
     }
 
     private synchronized void inc() {
         counter++;
-    }
-
-    private static void createDeadlock() {
-        MainConcurrency concurrency1 = new MainConcurrency();
-        MainConcurrency concurrency2 = new MainConcurrency();
-
-        Thread thread0 = new Thread(() -> {
-            synchronized (concurrency1) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                synchronized (concurrency2) {
-                    System.out.println("Block in thread-0");
-                }
-            }
-        });
-
-        Thread thread1 = new Thread(() -> {
-            synchronized (concurrency2) {
-                synchronized (concurrency1) {
-                    System.out.println("Block in thread-1");
-                }
-            }
-        });
-
-        thread0.start();
-        thread1.start();
     }
 }
