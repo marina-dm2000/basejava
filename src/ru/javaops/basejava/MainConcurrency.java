@@ -1,9 +1,10 @@
 package ru.javaops.basejava;
 
-import ru.javaops.basejava.util.DeadLock;
+import ru.javaops.basejava.util.StreamNumbers;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -88,12 +89,17 @@ public class MainConcurrency {
         //System.out.println(counter);
         System.out.println(mainConcurrency.atomicCounter.get());
 
+        /*hw_12
         String obj1 = "object1";
         String obj2 = "object2";
         DeadLock deadLock1 = new DeadLock(obj1, obj2);
         DeadLock deadLock2 = new DeadLock(obj2, obj1);
         deadLock1.threadStart();
-        deadLock2.threadStart();
+        deadLock2.threadStart();*/
+
+        StreamNumbers streamNumbers = new StreamNumbers();
+        System.out.println(streamNumbers.minValue(new int[]{1, 2, 3, 3, 2, 3}));
+        System.out.println(streamNumbers.oddOrEven(List.of(1, 2, 3, 3, 2, 3)));
     }
 
     private void inc() {
