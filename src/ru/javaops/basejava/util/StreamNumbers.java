@@ -10,8 +10,7 @@ public class StreamNumbers {
         return Arrays.stream(values)
                 .distinct()
                 .sorted()
-                .reduce((a, b) -> a * 10 + b)
-                .orElseThrow();
+                .reduce(0, (a, b) -> a * 10 + b);
     }
     public List<Integer> oddOrEven(List<Integer> integers) {
         Map<Boolean, List<Integer>> map = integers.stream()
