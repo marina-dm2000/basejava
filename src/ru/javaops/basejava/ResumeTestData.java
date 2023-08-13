@@ -1,22 +1,8 @@
 package ru.javaops.basejava;
 
-import ru.javaops.basejava.model.ContactType;
-import ru.javaops.basejava.model.Link;
-import ru.javaops.basejava.model.ListSection;
-import ru.javaops.basejava.model.Organization;
-import ru.javaops.basejava.model.OrganizationSection;
-import ru.javaops.basejava.model.Period;
 import ru.javaops.basejava.model.Resume;
-import ru.javaops.basejava.model.SectionType;
-import ru.javaops.basejava.model.TextSection;
-import ru.javaops.basejava.util.DateUtil;
 
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.Arrays;
-import java.util.List;
 
 public class ResumeTestData {
     public static void main(String[] args) throws MalformedURLException {
@@ -25,7 +11,7 @@ public class ResumeTestData {
 
     public static Resume createResume(String uuid, String fullName) throws MalformedURLException {
         Resume resume = new Resume(uuid, fullName);
-        resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
+        /*resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
         resume.addContact(ContactType.SKYPE, "grigory.kislin");
         resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
         resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
@@ -275,7 +261,7 @@ public class ResumeTestData {
                                         "Закончил с отличием",
                                         null)
                         ))
-        )));
+        )));*/
 
         return resume;
     }
