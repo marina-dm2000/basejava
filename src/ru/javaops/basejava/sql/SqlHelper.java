@@ -1,6 +1,6 @@
 package ru.javaops.basejava.sql;
 
-import ru.javaops.basejava.exception.ExistStorageException;
+import ru.javaops.basejava.util.SqlExceptionUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ public class SqlHelper {
              PreparedStatement ps = conn.prepareStatement(query)) {
             return executer.execute(ps);
         } catch (SQLException e) {
-            throw new ExistStorageException(null);
+            throw SqlExceptionUtil.exception(e);
         }
     }
 }

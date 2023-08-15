@@ -12,11 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlStorage implements Storage {
-    private final ConnectionFactory connectionFactory;
     private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
-        connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+        ConnectionFactory connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
         sqlHelper = new SqlHelper(connectionFactory);
     }
 
@@ -61,11 +60,11 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.getPreparedStatement("SELECT * FROM resume r ORDER BY r.uuid", ps -> {
+        return sqlHelper.getPreparedStatement("SELECT * FROM resume r ORDER BY r.full_name, r.uuid", ps -> {
             ResultSet rs = ps.executeQuery();
             List<Resume> resumes = new ArrayList<>();
             while (rs.next()) {
-                resumes.add(get(rs.getString("uuid").strip()));
+                resumes.add(get(rs.getString("uuid")));
             }
             return resumes;
         });
@@ -75,10 +74,7 @@ public class SqlStorage implements Storage {
     public int size() {
         return sqlHelper.getPreparedStatement("SELECT COUNT(*) AS count FROM resume r", ps -> {
             ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                return 0;
-            }
-            return rs.getInt("count");
+            return rs.next() ? rs.getInt("count") : 0;
         });
     }
 
