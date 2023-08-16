@@ -1,5 +1,6 @@
 package ru.javaops.basejava;
 
+import ru.javaops.basejava.model.ContactType;
 import ru.javaops.basejava.model.Resume;
 
 import java.net.MalformedURLException;
@@ -11,7 +12,7 @@ public class ResumeTestData {
 
     public static Resume createResume(String uuid, String fullName) throws MalformedURLException {
         Resume resume = new Resume(uuid, fullName);
-        /*resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
+        resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
         resume.addContact(ContactType.SKYPE, "grigory.kislin");
         resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
         resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
@@ -19,7 +20,7 @@ public class ResumeTestData {
         resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473/grigory-kislin");
         resume.addContact(ContactType.HOMEPAGE, "http://gkislin.ru/");
 
-        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения " +
+        /*resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения " +
                 "по Java Web и Enterprise технологиям"));
         resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, " +
                 "креативность, инициативность. Пурист кода и архитектуры."));
