@@ -62,9 +62,8 @@ public class SqlStorage implements Storage {
                     }
                     Resume r = new Resume(uuid, rs.getString("full_name"));
                     do {
-                        String value = rs.getString("value");
-                        ContactType type = ContactType.valueOf(rs.getString("type"));
-                        r.addContact(type, value);
+                        r.addContact(ContactType.valueOf(rs.getString("type")),
+                                rs.getString("value"));
                     } while (rs.next());
 
                     return r;
@@ -105,12 +104,24 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume resume) {
-        sqlHelper.getPreparedStatement("UPDATE resume SET full_name = ? WHERE uuid = ?", ps -> {
-            ps.setString(1, resume.getFullName());
-            ps.setString(2, resume.getUuid());
-            int result = ps.executeUpdate();
-            if (result == 0) {
-                throw new NotExistStorageException(resume.getUuid());
+        sqlHelper.transactionalExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name = ? WHERE uuid = ?")) {
+                ps.setString(1, resume.getFullName());
+                ps.setString(2, resume.getUuid());
+                int result = ps.executeUpdate();
+                if (result == 0) {
+                    throw new NotExistStorageException(resume.getUuid());
+                }
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("UPDATE contact SET value = ? WHERE resume_uuid = ? AND type = ?")) {
+                for (Map.Entry<ContactType, String> e : resume.getContacts().entrySet()) {
+                    ps.setString(1, e.getValue());
+                    ps.setString(2, resume.getUuid());
+                    ps.setString(3, e.getKey().name());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
             }
             return null;
         });

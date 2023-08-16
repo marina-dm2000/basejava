@@ -106,8 +106,8 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void update() {
-        Resume resume = new Resume(UUID_1, "newName");
+    public void update() throws MalformedURLException {
+        Resume resume = ResumeTestData.createResume(UUID_1, "newName");
         storage.update(resume);
         Assertions.assertEquals(resume, storage.get(UUID_1));
     }
