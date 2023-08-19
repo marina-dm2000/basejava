@@ -34,18 +34,9 @@ public class SqlStorage implements Storage {
                 ps.setString(2, r.getFullName());
                 ps.execute();
             }
-
-            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?, ?, ?)")) {
-                for (Map.Entry<ContactType, String> e : r.getContacts().entrySet()) {
-                    ps.setString(1, r.getUuid());
-                    ps.setString(2, e.getKey().name());
-                    ps.setString(3, e.getValue());
-                    ps.addBatch();
-                }
-                ps.executeBatch();
-            }
             return null;
         });
+        insertContact(r);
     }
 
     @Override
@@ -113,15 +104,34 @@ public class SqlStorage implements Storage {
                     throw new NotExistStorageException(resume.getUuid());
                 }
             }
+            return null;
+        });
 
-            try (PreparedStatement ps = conn.prepareStatement("UPDATE contact SET value = ? WHERE resume_uuid = ? AND type = ?")) {
+        deleteContact(resume);
+        insertContact(resume);
+    }
+
+    private void insertContact(Resume resume) {
+        sqlHelper.transactionalExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?, ?, ?)")) {
                 for (Map.Entry<ContactType, String> e : resume.getContacts().entrySet()) {
-                    ps.setString(1, e.getValue());
-                    ps.setString(2, resume.getUuid());
-                    ps.setString(3, e.getKey().name());
+                    ps.setString(1, resume.getUuid());
+                    ps.setString(2, e.getKey().name());
+                    ps.setString(3, e.getValue());
                     ps.addBatch();
                 }
                 ps.executeBatch();
+            }
+            return null;
+        });
+    }
+
+    private void deleteContact(Resume resume) {
+        sqlHelper.getPreparedStatement("DELETE FROM contact c WHERE c.resume_uuid =?", ps -> {
+            ps.setString(1, resume.getUuid());
+            int result = ps.executeUpdate();
+            if (result == 0) {
+                throw new NotExistStorageException(resume.getUuid());
             }
             return null;
         });
