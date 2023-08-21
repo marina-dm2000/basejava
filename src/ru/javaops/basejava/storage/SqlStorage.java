@@ -6,10 +6,13 @@ import ru.javaops.basejava.model.Resume;
 import ru.javaops.basejava.sql.ConnectionFactory;
 import ru.javaops.basejava.sql.SqlHelper;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +37,9 @@ public class SqlStorage implements Storage {
                 ps.setString(2, r.getFullName());
                 ps.execute();
             }
+            insertContact(conn, r);
             return null;
         });
-        insertContact(r);
     }
 
     @Override
@@ -75,13 +78,23 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.getPreparedStatement("SELECT * FROM resume r ORDER BY r.full_name, r.uuid", ps -> {
+        return sqlHelper.getPreparedStatement("SELECT * FROM resume r" +
+                "  LEFT JOIN contact c " +
+                "    ON r.uuid = c.resume_uuid " +
+                "ORDER BY r.full_name, r.uuid", ps -> {
             ResultSet rs = ps.executeQuery();
-            List<Resume> resumes = new ArrayList<>();
+            LinkedHashMap<String, Resume> resumes = new LinkedHashMap<>();
             while (rs.next()) {
-                resumes.add(get(rs.getString("uuid")));
+                String uuid = rs.getString("uuid");
+                if (!resumes.containsKey(uuid)) {
+                    Resume resume = new Resume(uuid, rs.getString("full_name"));
+                    resumes.put(uuid, resume);
+                }
+                resumes.get(uuid).addContact(
+                        ContactType.valueOf(rs.getString("type")),
+                        rs.getString("value"));
             }
-            return resumes;
+            return new ArrayList<>(resumes.values());
         });
     }
 
@@ -104,36 +117,33 @@ public class SqlStorage implements Storage {
                     throw new NotExistStorageException(resume.getUuid());
                 }
             }
+
+            deleteContact(conn, resume);
+            insertContact(conn, resume);
+
             return null;
         });
-
-        deleteContact(resume);
-        insertContact(resume);
     }
 
-    private void insertContact(Resume resume) {
-        sqlHelper.transactionalExecute(conn -> {
-            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?, ?, ?)")) {
-                for (Map.Entry<ContactType, String> e : resume.getContacts().entrySet()) {
-                    ps.setString(1, resume.getUuid());
-                    ps.setString(2, e.getKey().name());
-                    ps.setString(3, e.getValue());
-                    ps.addBatch();
-                }
-                ps.executeBatch();
+    private void insertContact(Connection conn, Resume resume) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?, ?, ?)")) {
+            for (Map.Entry<ContactType, String> e : resume.getContacts().entrySet()) {
+                ps.setString(1, resume.getUuid());
+                ps.setString(2, e.getKey().name());
+                ps.setString(3, e.getValue());
+                ps.addBatch();
             }
-            return null;
-        });
+            ps.executeBatch();
+        }
     }
 
-    private void deleteContact(Resume resume) {
-        sqlHelper.getPreparedStatement("DELETE FROM contact c WHERE c.resume_uuid =?", ps -> {
+    private void deleteContact(Connection conn, Resume resume) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid =?")) {
             ps.setString(1, resume.getUuid());
             int result = ps.executeUpdate();
             if (result == 0) {
                 throw new NotExistStorageException(resume.getUuid());
             }
-            return null;
-        });
+        }
     }
 }
