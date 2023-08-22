@@ -37,9 +37,7 @@ public class SqlStorage implements Storage {
                 ps.setString(2, r.getFullName());
                 ps.execute();
             }
-            if (!r.getContacts().isEmpty()) {
-                insertContact(conn, r);
-            }
+            insertContact(conn, r);
 
             return null;
         });
@@ -58,15 +56,9 @@ public class SqlStorage implements Storage {
                         throw new NotExistStorageException(uuid);
                     }
                     Resume r = new Resume(uuid, rs.getString("full_name"));
-                    if (rs.getString("resume_uuid") == null) {
-                        return r;
-                    }
-
                     do {
-                        r.addContact(ContactType.valueOf(rs.getString("type")),
-                                rs.getString("value"));
+                        saveContact(r, rs);
                     } while (rs.next());
-
                     return r;
                 });
     }
@@ -93,16 +85,13 @@ public class SqlStorage implements Storage {
             LinkedHashMap<String, Resume> resumes = new LinkedHashMap<>();
             while (rs.next()) {
                 String uuid = rs.getString("uuid");
-                if (!resumes.containsKey(uuid)) {
-                    Resume resume = new Resume(uuid, rs.getString("full_name"));
+                Resume resume = resumes.get(uuid);
+                if (resume == null) {
+                    resume = new Resume(uuid, rs.getString("full_name"));
                     resumes.put(uuid, resume);
                 }
-                if (rs.getString("resume_uuid") == null) {
-                    continue;
-                }
-                resumes.get(uuid).addContact(
-                        ContactType.valueOf(rs.getString("type")),
-                        rs.getString("value"));
+
+                saveContact(resume, rs);
             }
             return new ArrayList<>(resumes.values());
         });
@@ -127,10 +116,8 @@ public class SqlStorage implements Storage {
                     throw new NotExistStorageException(resume.getUuid());
                 }
             }
-            if (!resume.getContacts().isEmpty()) {
-                deleteContact(conn, resume);
-                insertContact(conn, resume);
-            }
+            deleteContact(conn, resume);
+            insertContact(conn, resume);
             return null;
         });
     }
@@ -151,6 +138,14 @@ public class SqlStorage implements Storage {
         try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid =?")) {
             ps.setString(1, resume.getUuid());
             ps.executeUpdate();
+        }
+    }
+
+    private void saveContact(Resume resume, ResultSet rs) throws SQLException {
+        String value = rs.getString("value");
+        if (value != null) {
+            resume.addContact(
+                    ContactType.valueOf(rs.getString("type")), value);
         }
     }
 }
