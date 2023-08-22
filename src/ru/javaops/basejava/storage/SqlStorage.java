@@ -37,7 +37,10 @@ public class SqlStorage implements Storage {
                 ps.setString(2, r.getFullName());
                 ps.execute();
             }
-            insertContact(conn, r);
+            if (!r.getContacts().isEmpty()) {
+                insertContact(conn, r);
+            }
+
             return null;
         });
     }
@@ -55,6 +58,10 @@ public class SqlStorage implements Storage {
                         throw new NotExistStorageException(uuid);
                     }
                     Resume r = new Resume(uuid, rs.getString("full_name"));
+                    if (rs.getString("resume_uuid") == null) {
+                        return r;
+                    }
+
                     do {
                         r.addContact(ContactType.valueOf(rs.getString("type")),
                                 rs.getString("value"));
@@ -90,6 +97,9 @@ public class SqlStorage implements Storage {
                     Resume resume = new Resume(uuid, rs.getString("full_name"));
                     resumes.put(uuid, resume);
                 }
+                if (rs.getString("resume_uuid") == null) {
+                    continue;
+                }
                 resumes.get(uuid).addContact(
                         ContactType.valueOf(rs.getString("type")),
                         rs.getString("value"));
@@ -117,10 +127,10 @@ public class SqlStorage implements Storage {
                     throw new NotExistStorageException(resume.getUuid());
                 }
             }
-
-            deleteContact(conn, resume);
-            insertContact(conn, resume);
-
+            if (!resume.getContacts().isEmpty()) {
+                deleteContact(conn, resume);
+                insertContact(conn, resume);
+            }
             return null;
         });
     }
@@ -140,10 +150,7 @@ public class SqlStorage implements Storage {
     private void deleteContact(Connection conn, Resume resume) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid =?")) {
             ps.setString(1, resume.getUuid());
-            int result = ps.executeUpdate();
-            if (result == 0) {
-                throw new NotExistStorageException(resume.getUuid());
-            }
+            ps.executeUpdate();
         }
     }
 }
