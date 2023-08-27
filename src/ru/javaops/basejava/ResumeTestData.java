@@ -1,9 +1,13 @@
 package ru.javaops.basejava;
 
 import ru.javaops.basejava.model.ContactType;
+import ru.javaops.basejava.model.ListSection;
 import ru.javaops.basejava.model.Resume;
+import ru.javaops.basejava.model.SectionType;
+import ru.javaops.basejava.model.TextSection;
 
 import java.net.MalformedURLException;
+import java.util.Arrays;
 
 public class ResumeTestData {
     public static void main(String[] args) throws MalformedURLException {
@@ -20,7 +24,7 @@ public class ResumeTestData {
         resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473/grigory-kislin");
         resume.addContact(ContactType.HOMEPAGE, "http://gkislin.ru/");
 
-        /*resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения " +
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения " +
                 "по Java Web и Enterprise технологиям"));
         resume.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, " +
                 "креативность, инициативность. Пурист кода и архитектуры."));
@@ -101,7 +105,7 @@ public class ResumeTestData {
 
                 "Родной русский, английский \"upper intermediate\""
         )));
-        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(Arrays.asList(
+        /*resume.addSection(SectionType.EXPERIENCE, new OrganizationSection(Arrays.asList(
                 new Organization(
                         new Link("Java Online Projects", new URL("https://javaops.ru/")),
                         List.of(

@@ -43,7 +43,7 @@ public class ListSection extends Section {
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (String item : list) {
-            s.append('•').append(item).append('\n');
+            s.append(item).append('\n');
         }
         return s.toString();
     }
