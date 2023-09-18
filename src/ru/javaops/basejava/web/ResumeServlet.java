@@ -1,17 +1,51 @@
 package ru.javaops.basejava.web;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import ru.javaops.basejava.Config;
+import ru.javaops.basejava.model.Resume;
+import ru.javaops.basejava.storage.Storage;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Writer;
 
 public class ResumeServlet extends HttpServlet {
+    private final Storage storage = Config.get().getStorage();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-        String name = request.getParameter("name");
-        response.getWriter().write(name == null ? "Hello resumes!" : "Hello " + name + "!");
+        request.getRequestDispatcher("main.jsp").forward(request, response);
+        Writer writer = response.getWriter();
+        writer.write(
+                "<html>\n" +
+                        "<head>\n" +
+                        "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+                        "    <link rel=\"stylesheet\" href=\"css/style.css\">\n" +
+                        "    <title>Список всех резюме</title>\n" +
+                        "</head>\n" +
+                        "<body>\n" +
+                        "<section>\n" +
+                        "<table border=\"1\" cellpadding=\"8\" cellspacing=\"0\">\n" +
+                        "    <tr>\n" +
+                        "        <th>UUID</th>\n" +
+                        "        <th>Имя</th>\n" +
+                        "    </tr>\n");
+        for (Resume resume : storage.getAllSorted()) {
+            writer.write(
+                    "<tr>\n" +
+                            "     <td>" + resume.getUuid() + "</td>\n" +
+                            "     <td>" + resume.getFullName() + "</td>\n" +
+                            "</tr>\n");
+        }
+        writer.write("</table>\n" +
+                "</section>\n" +
+                "</body>\n" +
+                "</html>\n");
     }
 
     @Override
