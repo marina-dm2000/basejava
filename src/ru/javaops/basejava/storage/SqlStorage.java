@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -83,17 +84,31 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.getPreparedStatement("SELECT * FROM resume r ORDER BY r.full_name, r.uuid", ps -> {
-            ResultSet rs = ps.executeQuery();
-            List<Resume> resumes = new ArrayList<>();
-            while (rs.next()) {
-                Resume resume = new Resume(rs.getString("uuid"), rs.getString("full_name"));
-                getAllContacts(resume);
-                getAllSections(resume);
-                resumes.add(resume);
+        Map<String, Resume> resumes = new LinkedHashMap<>();
+        return new ArrayList<>(sqlHelper.transactionalExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume r ORDER BY r.full_name, r.uuid")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Resume resume = new Resume(rs.getString("uuid"), rs.getString("full_name"));
+                    resumes.put(rs.getString("uuid"), resume);
+                }
             }
-            return resumes;
-        });
+
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact c")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    saveContact(resumes.get(rs.getString("resume_uuid")), rs);
+                }
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section s")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    saveSection(resumes.get(rs.getString("resume_uuid")), rs);
+                }
+            }
+            return resumes.values();
+        }));
     }
 
     @Override
@@ -151,17 +166,6 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void getAllContacts(Resume resume) {
-        sqlHelper.getPreparedStatement("SELECT * FROM contact c WHERE c.resume_uuid = ?", ps -> {
-            ps.setString(1, resume.getUuid());
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                saveContact(resume, rs);
-            }
-            return null;
-        });
-    }
-
     private void insertSection(Connection conn, Resume resume) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type_section, content) VALUES (?, ?, ?)")) {
             for (Map.Entry<SectionType, Section> e : resume.getSections().entrySet()) {
@@ -181,16 +185,5 @@ public class SqlStorage implements Storage {
             Section section = JsonParser.read(rs.getString("content"), Section.class);
             resume.addSection(type, section);
         }
-    }
-
-    private void getAllSections(Resume resume) {
-        sqlHelper.getPreparedStatement("SELECT * FROM section s WHERE s.resume_uuid = ?", ps -> {
-            ps.setString(1, resume.getUuid());
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                saveSection(resume, rs);
-            }
-            return null;
-        });
     }
 }
