@@ -15,6 +15,14 @@ import java.io.IOException;
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
 
+    static {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);

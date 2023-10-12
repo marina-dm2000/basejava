@@ -29,7 +29,7 @@
             <c:set var="section" value="${sectionEntry.value}"/>
             <jsp:useBean id="section" type="ru.javaops.basejava.model.Section"/>
             <tr>
-                <td><a name="type.name">${type.title}</a></td>
+                <td><h3><a name="type.name">${type.title}</a></h3></td>
                 <c:if test="${type == 'OBJECTIVE'}">
                     <td><%=((TextSection) section).getText()%></td>
                 </c:if>
